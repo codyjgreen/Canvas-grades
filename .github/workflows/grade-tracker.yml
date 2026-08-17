@@ -1,0 +1,30 @@
+name: Student Grade Tracker
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 12 * * *'
+
+jobs:
+  run-tracker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run grade tracker
+        env:
+          CANVAS_TOKEN: ${{ secrets.CANVAS_TOKEN }}
+          CANVAS_DOMAIN: ${{ secrets.CANVAS_DOMAIN }}
+          COURSES_SPREADSHEET_ID: ${{ secrets.COURSES_SPREADSHEET_ID }}
+          GRADE_TRACKER_SPREADSHEET_ID: ${{ secrets.GRADE_TRACKER_SPREADSHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: python grade_tracker.py
