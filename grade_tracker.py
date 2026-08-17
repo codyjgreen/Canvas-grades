@@ -87,6 +87,8 @@ SCOPES = [
 
 def env(name, required=True):
     val = os.environ.get(name)
+    if val is not None:    
+        val = val.strip()
     if required and not val:
         print(f"ERROR: missing required environment variable {name}", file=sys.stderr)
         sys.exit(1)
